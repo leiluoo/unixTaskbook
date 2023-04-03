@@ -1,0 +1,8 @@
+# ignore all executable files
+*.out
+
+# ignore all log files
+*log
+
+# ignore all dat files
+*.dat
