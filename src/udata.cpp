@@ -334,9 +334,12 @@ bool CheckAllResults()
             }
         }
         odata_procs[i] = odata_i;
-
+        if (i == 0) continue;
         check_result = CheckResults(i) && check_result;
     }
+
+    if (check_result) check_result = CheckResults(0);
+    else headerinfos[0] = WrongSolutionMsg;
 
     return check_result;
 }
@@ -358,6 +361,8 @@ std::string check_bg(const std::string &RunInfo)
         bg_color = colors::BG_RED;
     else if (RunInfo == RightSolutionMsg)
         bg_color = colors::BG_GREEN;
+    else if (RunInfo == DemoRunMsg)
+        bg_color = colors::BG_BLUE;
     return bg_color;
 }
 
