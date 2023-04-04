@@ -21,17 +21,20 @@ namespace utilities
 		char cmd[200];
 		if (filetype != 1)
 		{
-			std::cout << CYAN << "===" << comment << name << "===" << BROWN << std::endl;
+			//std::cout << CYAN << "===" << comment << name << "===" << BROWN << std::endl;
+			std::cout << CYAN << format_info("[ " + std::string(comment) + std::string(name) + " ]", ' ', false) << RESET << std::endl;
 		}
 		else
 		{
-			std::cout << CYAN << "===" << comment << BROWN << std::endl;
+			//std::cout << CYAN << "===" << comment << BROWN << std::endl;
+			std::cout << CYAN << format_info("[ " + std::string(comment) + " ]", ' ', false) << RESET << std::endl;
 		}
 		if (filetype == 0 || flines >= 1000)
 		{
 			sprintf(cmd, "cat %s", name);
 			system(cmd);
-			LOG_FILE("\n===End Of File===");
+			//LOG_FILE("\n===End Of File===");
+			LOG_FILE("\n%s", format_info("[ end of file ]", ' ', false).c_str());
 		}
 		else
 		{

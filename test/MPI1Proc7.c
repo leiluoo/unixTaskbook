@@ -15,7 +15,7 @@ int main()
             GetD(&num);
             sum += num;
         }
-        if (rank == 0);
+        if (rank == 0)
             //PutD(sum+1);
         else 
             PutD(sum);
