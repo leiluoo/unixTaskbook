@@ -18,6 +18,7 @@ public:
 	virtual void utb_generate_task_test(int task_num, int test_num)
 	{
 		pt4_generate_task_test(task_group, task_num, test_num);
+		execute_argv = {"mpiexec", "-np", std::to_string(pt4_mpi_get_size())};
 	}
 
 	virtual void utb_generate_task_control(int task_num) {}
@@ -57,7 +58,7 @@ utbMPI2Send::utbMPI2Send()
 	compiler = "mpicc";
 	compile_argv = {compiler, "-Wall", "-w", "", "ut1.c", "-o"};
 
-	execute_argv = {"mpiexec", "-np", std::to_string(pt4_mpi_get_size())};
+	execute_argv = {};
 
 	task_group = "MPI2Send";
 	task_count = 32;

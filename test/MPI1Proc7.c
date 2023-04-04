@@ -15,7 +15,10 @@ int main()
             GetD(&num);
             sum += num;
         }
-        PutD(sum);
+        if (rank == 0);
+            //PutD(sum+1);
+        else 
+            PutD(sum);
     }
     MPI_Finalize();
 }

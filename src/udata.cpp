@@ -339,7 +339,11 @@ bool CheckAllResults()
     }
 
     if (check_result) check_result = CheckResults(0);
-    else headerinfos[0] = WrongSolutionMsg;
+    else 
+    {
+        CheckResults(0);
+        headerinfos[0] = WrongSolutionMsg;
+    }
 
     return check_result;
 }
