@@ -6,3 +6,6 @@
 
 # ignore all dat files
 *.dat
+
+# ignore unixTaskbook
+unixTaskbook
