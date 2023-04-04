@@ -1,2 +1,2 @@
 #!/bin/bash
-g++ main.cpp unixTaskbook.cpp utilities.cpp tasklib.cpp error.cpp service.cpp -o unixTaskbook -ldl
+g++ src/main.cpp src/unixTaskbook.cpp src/utilities.cpp src/tasklib.cpp src/error.cpp src/service.cpp -o unixTaskbook -ldl
