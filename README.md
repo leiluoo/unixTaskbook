@@ -1,10 +1,10 @@
 # Screenshot
 
 ## Show Task Description
-![](1.jpg)
+![](images/1.jpg)
 
 ## Run a task
-![](2.jpg)
+![](images/2.jpg)
 
 Still interest? Turn to my [thesis](https://github.com/leiluoo/unixTaskbook/new/main?readme=1) for more info!✨
 
