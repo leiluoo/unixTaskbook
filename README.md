@@ -6,7 +6,7 @@
 ## Run a task
 ![](images/2.jpg)
 
-Still interest? Turn to my [thesis](https://github.com/leiluoo/unixTaskbook/new/main?readme=1) for more info!✨
+Still interest? Turn to my [thesis](https://github.com/leiluoo/thesis) for more info!✨
 
 # How to run
 ```bash
