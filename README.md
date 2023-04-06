@@ -8,7 +8,7 @@
 
 Still interest? Turn to my [thesis](https://github.com/leiluoo/thesis) for more info!✨
 
-# How to run## 
+# How to run
 ## prerequisite
 intall MPICH on your machine
 ```bash
