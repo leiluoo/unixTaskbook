@@ -14,6 +14,7 @@ firstly, intall MPICH on your machine
 ```bash
 apt install mpich
 ```
+then clone the repo
 ```bash
 git clone https://github.com/leiluoo/unixTaskbook.git
 ```
