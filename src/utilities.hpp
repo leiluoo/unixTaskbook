@@ -12,6 +12,7 @@
 #include <chrono>
 #include <ctime>
 #include "color.hpp"
+#include <regex>
 namespace utilities
 {
 #define MAX_SIZE 65535

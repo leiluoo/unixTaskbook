@@ -127,21 +127,24 @@ void UnixTaskbook::parse_task_name(const std::string pre_task_name)
 		this->task_program_path = "./" + pre_task_name + ".c";
 	}
 
-	std::string numerics("0123456789");
+	// std::string numerics("0123456789");
 	//since we have task named MPI1Proc, which has a digit in the name
 	//now we use find_last_of to find the task number. 
 	//std::string::size_type pos = this->task_name.find_first_of(numerics);
-	std::string::size_type pos = this->task_name.find_last_of(numerics);
-	if (pos == std::string::npos)
+	// std::string::size_type pos = this->task_name.find_last_of(numerics);
+
+    std::regex pattern("\\d+$");
+    std::smatch matches;
+	if (!std::regex_search(this->task_name, matches, pattern))
 	{
 		LOG_ERROR("Task name should be in the format of <task_name><task_num>");
 	}
 #if defined __linux__
-	task_lib_name = std::string("libutb") + this->task_name.substr(0, pos) + ".so";
+	task_lib_name = std::string("libutb") + matches.prefix().str() + ".so";
 #elif defined __APPLE__
-	task_lib_name = std::string("libutb") + this->task_name.substr(0, pos) + ".dylib";
+	task_lib_name = std::string("libutb") + matches.prefix().str() + ".dylib";
 #endif
-	task_num = atoi(this->task_name.substr(pos).c_str());
+	task_num = atoi(matches.str().c_str());
 }
 void UnixTaskbook::parse_command(int argc, char *argv[])
 {
