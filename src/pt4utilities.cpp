@@ -30,9 +30,9 @@ bool load_lib()
     bool result = false;
     free_lib();
 #if defined __linux__
-	dylib_name = std::string("libmpipt4_en.so");
+	dylib_name += ".so";
 #elif defined __APPLE__
-	dylib_name = std::string("libmpipt4_en.dylib");
+	dylib_name += ".dylib";
 #endif
     FLibHandle = dlopen(dylib_name.c_str(), RTLD_LAZY);
     if (FLibHandle == nullptr)
@@ -68,10 +68,19 @@ void init_task(int num, int test)
     InitTask_(num, test);
 }
 
+void check_dylib(std::string task_group)
+{
+    if (task_group.find("MPI") != std::string::npos) 
+        dylib_name = "libmpipt4_en";
+    else 
+        dylib_name = "libpt4_en";
+}
+
 void pt4_print_task_info(std::string task_group, int task_num, int language_option)
 {
 // shows task info (see InitPrg)
 	//std::cout<< "<<<Task formulation output>>>" << std::endl;
+    check_dylib(task_group);
     if (!load_lib())
     {
         return;
@@ -88,6 +97,7 @@ void pt4_generate_task_test(std::string task_group, int task_num, int test_num)
 {
 // creates all necessary files for selected task (see InitPrg)
 	//std::cout<< "<<<Creation of required files>>>" << std::endl;
+    check_dylib(task_group);
     if (!load_lib())
         return;
     init_group(task_group);
