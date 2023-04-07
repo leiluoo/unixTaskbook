@@ -102,39 +102,27 @@ void pt4_generate_task_test(std::string task_group, int task_num, int test_num)
         return;
     init_group(task_group);
     init_task(task_num, test_num);
-    if (LoadData())
-    {
-        CreateAddFiles();
-    }
+    
+    CreateAddFiles();
 }
 
 void pt4_print_extra_info(std::string task_group, int task_num)
 {
 // shows results (see CheckPrg)
 	//std::cout<< "<<<Task results output>>>" << std::endl;
-    if (LoadData())
-    {
-        PrintTask();
-    }
+    PrintTask();
 }
 
 int pt4_check_program(std::string task_group, int test_num)
 {
     bool result = false;
-	//std::cout<< "<<<Checking the results>>>" << std::endl;
-    if (LoadData())
-    {
-        result = CheckAllResults();
-    }
+	//std::cout<< "<<<Checking the results>>>" << std::endl;    
+    result = CheckAllResults();
 	return result ? 0 : 1;
 // checks results (see CheckPrg)
 }
 
 int pt4_mpi_get_size()
 {
-    if (LoadData())
-    {
-        return GetCursize();
-    }
-    return 0;
+    return GetCursize();
 }
