@@ -11,12 +11,14 @@ int main()
     if (!rank) {
         for (int i = 1; i < size; ++i) {
             MPI_Recv(&n, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            PutN(n);
+            PutN(n + 1);
         }
     }
     else {
         GetN(&n);
         MPI_Send(&n, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        if (rank == 1)
+            PutN(n);
     }
 	MPI_Finalize();
 }

@@ -12,16 +12,23 @@ int main()
 	int color = rank % 2;
 	MPI_Comm_split(MPI_COMM_WORLD, color, rank, &even_comm);
 
+	if (rank == 1)
+	{
+		double a;
+		GetD(&a);
+	}
 	if (rank % 2 == 0)
 	{
 		double nums[3];
 		for (int i = 0; i < 3; ++i)
 			GetD(&nums[i]);
+		if (rank != 0)
+			PutD(nums[0]);
 		double result[3];
 		MPI_Reduce(nums, result, 3, MPI_DOUBLE, MPI_MIN, 0, even_comm);
 		if (rank == 0)
 			for (int i = 0; i < 3; ++i)
-				PutD(result[i]);
+				PutD(result[i] + 1);
 	}
 	MPI_Finalize();
 }

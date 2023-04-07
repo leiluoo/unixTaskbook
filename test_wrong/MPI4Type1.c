@@ -14,18 +14,21 @@ int main()
 	int *numbers = (int*)malloc((size - 1) * 3 * sizeof(int));
 
 	if (rank == 0)
-		for (int i = 0; i < (size - 1) * 3; ++i)
+		for (int i = 0; i < (size - 1) * 3 + 1; ++i)
 			GetN(&numbers[i]);
 
 	MPI_Bcast(numbers, size - 1, newtype, 0, MPI_COMM_WORLD);
 
 	if (rank != 0)
 		for (int i = 0; i < (size - 1) * 3; ++i)
+		{
 			PutN(numbers[i]);
+			if (rank == 1)
+				PutN(numbers[i]);
+		}
 
 	MPI_Type_free(&newtype);
 	free(numbers);
 	numbers = NULL;
 	MPI_Finalize();
 }
-
