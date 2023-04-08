@@ -102,8 +102,10 @@ void pt4_generate_task_test(std::string task_group, int task_num, int test_num)
         return;
     init_group(task_group);
     init_task(task_num, test_num);
-    
-    CreateAddFiles();
+    if (LoadData())
+    {
+        CreateAddFiles();
+    }
 }
 
 void pt4_print_extra_info(std::string task_group, int task_num)
