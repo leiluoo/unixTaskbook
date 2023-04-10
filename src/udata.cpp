@@ -9,6 +9,7 @@
 #include <map>
 #include "box_drawings.hpp"
 #include <regex>
+#include <sstream>
 
 // Declare variables
 int TaskCount, NumberOfTests, NumberOfUsedData,
@@ -374,6 +375,20 @@ std::string check_bg(const std::string &RunInfo)
     return bg_color;
 }
 
+std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "") {
+    if (templateLine != "")
+    {
+        size_t preTextSize = (80 * box_drawings::LIGHT_HORIZONTAL.size() - templateLine.size()) / (box_drawings::LIGHT_HORIZONTAL.size() - 1);
+        return templateLine.replace((pos - preTextSize) * box_drawings::LIGHT_HORIZONTAL.size() + preTextSize, title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
+    }
+    std::string line;
+    for (size_t i = 0; i < MaxWidth; ++i) {
+        line += box_drawings::LIGHT_HORIZONTAL;
+    }
+    return line.replace(pos * box_drawings::LIGHT_HORIZONTAL.size(), title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
+}
+
+
 // print header info
 void PrintHeader(const std::vector<std::string> &RunInfos)
 {
@@ -386,29 +401,10 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
 
     std::vector<std::string> s(2);
     std::string s1 = InitString(' ');
-    std::string s2 = InitString('-');
-    // s[0] = s2;
-    // PrintCmt(s[0], ' ' + GrTopic << std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
-    // PrintCmt(s[0], '(' << std::to_string(TestNumber) + ')', 75);
-    // std::cout << '-' << s[0] << '-' << std::endl;
-    int cnt = 0;
-    for (; cnt < 4; cnt++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-    }
-    s[0] = s[0] + " " + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ";
-    for (int i = s[0].length() - cnt * 2; i < 75; i++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-        cnt++;
-    }
-    s[0] = s[0] + '(' + std::to_string(TestNumber) + ')';
-    for (int i = s[0].length() - cnt * 2; i < MaxWidth; i++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-        cnt++;
-    }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
+              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
     for (const auto &group : groups)
     {
         if (group.first == RightSolutionMsg)
@@ -423,11 +419,10 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
         std::string procs = tmp.substr(0, tmp.length() - 1);
         oss2 << std::setw(8) << procs << " | " << group.first;
         s[1] = s1;
-        // PrintCmt(s[1], oss2.str(), 2);
-        // std::cout << '|' << s[1] << '|' << std::endl;
         PrintCmt(s[1], oss2.str(), 2);
         std::string bg_color = check_bg(group.first);
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
+                  << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
     }
 }
 
@@ -436,36 +431,15 @@ void PrintHeader(const std::string RunInfo)
 {
     std::vector<std::string> s(2);
     std::string s1 = InitString(' ');
-    std::string s2 = InitString('-');
-    // s[0] = s2;
-    // PrintCmt(s[0], ' ' + GrTopic << std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
-    // PrintCmt(s[0], '(' << std::to_string(TestNumber) + ')', 75);
-    // std::cout << '-' << s[0] << '-' << std::endl;
-    // s[1] = s1;
-    // PrintCmt(s[1], RunInfo, 2);
-    // std::cout << '|' << s[1] << '|' << std::endl;
-    int cnt = 0;
-    for (; cnt < 4; cnt++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-    }
-    s[0] = s[0] + " " + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ";
-    for (int i = s[0].length() - cnt * 2; i < 75; i++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-        cnt++;
-    }
-    s[0] = s[0] + '(' + std::to_string(TestNumber) + ')';
-    for (int i = s[0].length() - cnt * 2; i < MaxWidth; i++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-        cnt++;
-    }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
+              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
     s[1] = s1;
     PrintCmt(s[1], RunInfo, 2);
     std::string bg_color = check_bg(RunInfo);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
+              << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
 }
 
 // print task text
@@ -473,30 +447,17 @@ void PrintTaskText()
 {
     std::vector<std::string> s(nttext + 1);
     std::string s1 = InitString(' ');
-    std::string s2 = InitString('-');
-    // s[0] = s2;
-    // for (int i = 1; i <= nttext; ++i)
-    // {
-    //     s[i] = s1;
-    // }
-    // for (int i = 0; i < nttext; ++i)
-    // {
-    //     PrintCmt(s[ttext[i].y], ttext[i].s, ttext[i].x);
-    // }
-    // std::cout << '-' << s[0] << '-' << std::endl;
-    // for (int i = 1; i <= nttext; ++i)
-    // {
-    //     std::cout << '|' << s[i] << '|' << std::endl;
-    // }
     for (int i = 0; i < MaxWidth; i++)
         s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
     for (int i = 1; i <= nttext; i++)
         s[i] = s1;
     for (int i = 0; i <= nttext - 1; i++)
         PrintCmt(s[ttext[i].y], ttext[i].s, ttext[i].x);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
     for (int i = 1; i <= nttext; i++)
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s[i] << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s[i] 
+                  << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
 }
 
 std::string ProcessString(const std::string &input)
@@ -535,17 +496,9 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
 {
     std::vector<std::string> s(size + 1);
     std::string s1 = InitString(' ');
-    std::string s2 = InitString('-');
+    s[0] = BuildTitle(" " + title + " ", 4);
     for (int i = 1; i <= size; i++)
         s[i] = s1;
-    int cnt = 1;
-    for (; cnt < 4; cnt++)
-    {
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
-    }
-    s[0] = s[0] + " " + title + " ";
-    for (int i = s[0].length() - cnt * 2; i < MaxWidth - 2; i++)
-        s[0] = s[0] + box_drawings::LIGHT_HORIZONTAL;
     for (int i = 0; i < na; i++)
     {
         switch (a[i].id)
@@ -571,22 +524,24 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
     {
         PrintCmt(s[b[i].y], b[i].s, b[i].x);
     }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
     for (int i = 1; i <= size; i++)
     {
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << Colorize(s[i]) << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << Colorize(s[i]) 
+                  << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
     }
 }
 
 void PrintEndLine()
 {
-    // std::cout << "-" << InitString('-') << "-" << std::endl;
     std::string s1 = "";
     for (int i = 0; i < MaxWidth; i++)
     {
         s1 = s1 + box_drawings::LIGHT_HORIZONTAL;
     }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_UP_AND_RIGHT << s1 + box_drawings::LIGHT_UP_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_UP_AND_RIGHT << s1 << 
+              box_drawings::LIGHT_UP_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
 }
 
 // check if it is necessary to print show info
@@ -609,18 +564,10 @@ void PrintShow()
         return;
     std::string s1 = InitString(' ');
     std::string s0 = "";
-    // std::string s0 = InitString('-');
-    // PrintCmt(s0, " Debug information ", 4);
-    // std::cout << "-" << s0 << "-" << std::endl;
-    int cnt = 1;
-    for (; cnt < 4; cnt++)
-    {
-        s0 = s0 + box_drawings::LIGHT_HORIZONTAL;
-    }
-    s0 = s0 + " Debug information ";
-    for (int i = s0.length() - cnt * 2; i < MaxWidth - 2; i++)
-        s0 = s0 + box_drawings::LIGHT_HORIZONTAL;
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0 + box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+    s0 = BuildTitle(" Debug information ", 4);
+
+    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0 
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
     for (int i = 0; i < cursize; ++i)
     {
         std::string show_file = "ut1sh" + std::to_string(i) + ".dat";
@@ -629,20 +576,31 @@ void PrintShow()
 
             std::ifstream f(show_file);
             std::string s;
+            int j = 1;
             while (std::getline(f, s))
             {
-                while (s.length() > MaxWidth - 2)
+                while (s.length() > MaxWidth - 3)
                 {
                     s0 = s1;
-                    PrintCmt(s0, s.substr(0, MaxWidth - 2) + "*", 2);
-                    s.erase(0, MaxWidth - 2);
-                    // std::cout << "|" << s0 << "|" << std::endl;
-                    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 + box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+                    std::ostringstream os;
+                    os << " " << i << "|  " << j << ">  " << s;
+                    s = os.str();
+                    PrintCmt(s0, s.substr(0, MaxWidth - 3) + "*", 2);
+                    s.erase(0, MaxWidth - 3);
+                    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << s0 
+                              << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                    os.clear();
+                    j++;
                 }
                 s0 = s1;
+                std::ostringstream os;
+                os << " " << i << "|  " << j << ">  " << s;
+                s = os.str();
                 PrintCmt(s0, s, 2);
-                // std::cout << "|" << s0 << "|" << std::endl;
-                std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 + box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+                std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << s0 
+                          << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                os.clear();
+                j++;
             }
             f.close();
         }
@@ -667,7 +625,6 @@ void PrintTask()
     PrintTaskText();
     PrintData(idata, nidata, icmt, nicmt, DataHeight, "Input data", false);
     PrintData(rdata, nrdata, ocmt, nocmt, ResultHeight, "Output data", true);
-    // if (headerinfo != RightSolutionMsg)
     if (!check_result)
     {
         PrintData(odata, nodata, ocmt, nocmt, ResultHeight, "Example of right solution", false);

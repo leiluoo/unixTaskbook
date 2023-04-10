@@ -1,4 +1,5 @@
 #include "ut1.h"
+#include <mpi.h>
 
 int main()
 {

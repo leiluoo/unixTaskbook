@@ -17,8 +17,6 @@ int main()
             sum += num;
         }
         PutD(sum);
-        ShowLine("what the hell 10");
-        ShowLineD(sum);
     }
     MPI_Finalize();
 }
