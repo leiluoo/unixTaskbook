@@ -55,7 +55,7 @@ utbMPI1Proc::utbMPI1Proc()
 	library_name = "libutbMPI1Proc.dylib";
 #endif
 	compiler = "mpicc";
-	compile_argv = {compiler, "-Wall", "-w", "", "ut1.c", "-o"};
+	compile_argv = {compiler, "-Wall", "-w", "", "ut1mpi.c", "-o"};
 
 	execute_argv = {};
 

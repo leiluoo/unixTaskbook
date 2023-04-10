@@ -56,7 +56,7 @@ utbMPI5Comm::utbMPI5Comm()
 #endif
 
 	compiler = "mpicc";
-	compile_argv = {compiler, "-Wall", "-w", "", "ut1.c", "-o"};
+	compile_argv = {compiler, "-Wall", "-w", "", "ut1mpi.c", "-o"};
 
 	execute_argv = {};
 
