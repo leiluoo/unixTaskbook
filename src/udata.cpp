@@ -580,7 +580,7 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
                         continue;
                     }
                 }
-                std::cout << colors::YELLOW << s[i][j] << colors::RESET;
+                std::cout << colors::BRIGHT_YELLOW << s[i][j] << colors::RESET;
                 if ((s[i][j] >= '0') && (s[i][j] <= '9'))
                 {
                     if (s[i][j + 1] == ' ')
