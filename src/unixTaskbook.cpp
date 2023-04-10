@@ -630,7 +630,7 @@ int UnixTaskbook::execute_run(const std::string pre_task_name)
 
 	print_task_info(task_num, language_option);
 	if (!tasklib->print_file)
-		system("rm \\$\\$pt4dat\\$\\$.dat");
+		//system("rm \\$\\$pt4dat\\$\\$.dat");
 	/*
 		if (program.size() == 0)
 		{
@@ -654,7 +654,7 @@ int UnixTaskbook::execute_run(const std::string pre_task_name)
 
 		create_test(i + 1);  //MABR - new parameter: testnumber (from 1 to total_test_count)
 		if (!tasklib->print_file)
-			system("rm \\$\\$pt4dat\\$\\$.dat");
+			//system("rm \\$\\$pt4dat\\$\\$.dat");
 		execute_program();
 		status = check_program_result(i, print_option);
 		if (status != 0)

@@ -1,5 +1,6 @@
 
 #include "ut1.h"
+#include <mpi.h>
 int main()
 {
     MPI_Init(NULL, NULL);
@@ -16,6 +17,8 @@ int main()
             sum += num;
         }
         PutD(sum);
+        ShowLine("what the hell 10");
+        ShowLineD(sum);
     }
     MPI_Finalize();
 }
