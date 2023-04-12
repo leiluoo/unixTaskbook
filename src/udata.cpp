@@ -404,7 +404,7 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
     s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
     s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
-              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     for (const auto &group : groups)
     {
         if (group.first == RightSolutionMsg)
@@ -417,12 +417,12 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
         }
         std::string tmp = oss1.str();
         std::string procs = tmp.substr(0, tmp.length() - 1);
-        oss2 << std::setw(8) << procs << " | " << group.first;
+        oss2 << std::setw(10) << procs << " | " << group.first;
         s[1] = s1;
         PrintCmt(s[1], oss2.str(), 2);
         std::string bg_color = check_bg(group.first);
         std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
-                  << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+                  << colors::RESET << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
     }
 }
 
@@ -434,12 +434,12 @@ void PrintHeader(const std::string RunInfo)
     s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
     s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
-              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     s[1] = s1;
     PrintCmt(s[1], RunInfo, 2);
     std::string bg_color = check_bg(RunInfo);
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
-              << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+              << colors::RESET << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
 }
 
 // print task text
@@ -454,25 +454,49 @@ void PrintTaskText()
     for (int i = 0; i <= nttext - 1; i++)
         PrintCmt(s[ttext[i].y], ttext[i].s, ttext[i].x);
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
-              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 1; i <= nttext; i++)
         std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s[i] 
-                  << box_drawings::LIGHT_VERTICAL << colors::WHITE << colors::BOLD << std::endl;
+                  << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
 }
+
+// std::string ProcessString(const std::string &input)
+// {
+//     std::string output = input;
+//     size_t pos = 0;
+//     while ((pos = output.find("Process " + colors::YELLOW, pos)) != std::string::npos)
+//     {
+//         pos += ("Process " + colors::YELLOW).size();
+//         size_t endPos = output.find(colors::RESET, pos);
+//         if (endPos == std::string::npos)
+//             break;
+//         output.replace(pos, endPos - pos, colors::WHITE + output.substr(pos, endPos - pos) + colors::RESET);
+//         pos = endPos + colors::RESET.size();
+//     }
+//     return output;
+// }
+
+// std::string Colorize(const std::string &text)
+// {
+
+//     std::regex special_pattern(R"(\s*(\d+)\|\s*(\d+)\>\s*(.*))");
+//     if (std::regex_match(text, special_pattern))
+//     {
+//         return text;
+//     }
+
+//     std::regex pattern(R"((-?(true|false|\d+(\.\d+)?)))");
+
+//     std::string colored_text = std::regex_replace(text, pattern, colors::YELLOW + "$&" + colors::RESET);
+
+//     return ProcessString(colored_text);
+// }
 
 std::string ProcessString(const std::string &input)
 {
-    std::string output = input;
-    size_t pos = 0;
-    while ((pos = output.find("Process " + colors::BRIGHT_YELLOW, pos)) != std::string::npos)
-    {
-        pos += ("Process " + colors::BRIGHT_YELLOW).size();
-        size_t endPos = output.find(colors::RESET, pos);
-        if (endPos == std::string::npos)
-            break;
-        output.replace(pos, endPos - pos, colors::WHITE + output.substr(pos, endPos - pos) + colors::RESET);
-        pos = endPos + colors::RESET.size();
-    }
+    std::regex re("Process \033\\[0m\033\\[38;2;255;255;0m(\\d+)\033\\[0m\033\\[38;2;255;255;255m");
+    std::string replacement("Process " + std::string("$1") + colors::RESET + colors::WHITE);
+    std::string output = std::regex_replace(input, re, replacement);
     return output;
 }
 
@@ -487,7 +511,7 @@ std::string Colorize(const std::string &text)
 
     std::regex pattern(R"((-?(true|false|\d+(\.\d+)?)))");
 
-    std::string colored_text = std::regex_replace(text, pattern, colors::BRIGHT_YELLOW + "$&" + colors::RESET);
+    std::string colored_text = std::regex_replace(text, pattern, colors::RESET + colors::YELLOW + "$&" + colors::RESET + colors::WHITE);
 
     return ProcessString(colored_text);
 }
@@ -525,11 +549,11 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
         PrintCmt(s[b[i].y], b[i].s, b[i].x);
     }
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
-              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 1; i <= size; i++)
     {
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << Colorize(s[i]) 
-                  << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << Colorize(s[i]) 
+                  << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
     }
 }
 
@@ -541,7 +565,7 @@ void PrintEndLine()
         s1 = s1 + box_drawings::LIGHT_HORIZONTAL;
     }
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_UP_AND_RIGHT << s1 << 
-              box_drawings::LIGHT_UP_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              box_drawings::LIGHT_UP_AND_LEFT << colors::RESET << std::endl;
 }
 
 // check if it is necessary to print show info
@@ -567,7 +591,7 @@ void PrintShow()
     s0 = BuildTitle(" Debug information ", 4);
 
     std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0 
-              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::WHITE << colors::BOLD << std::endl;
+              << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 0; i < cursize; ++i)
     {
         std::string show_file = "ut1sh" + std::to_string(i) + ".dat";
@@ -587,8 +611,8 @@ void PrintShow()
                     s = os.str();
                     PrintCmt(s0, s.substr(0, MaxWidth - 3) + "*", 2);
                     s.erase(0, MaxWidth - 3);
-                    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << s0 
-                              << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 
+                              << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
                     os.clear();
                     j++;
                 }
@@ -597,8 +621,8 @@ void PrintShow()
                 os << " " << i << "|  " << j << ">  " << s;
                 s = os.str();
                 PrintCmt(s0, s, 2);
-                std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::BLACK << s0 
-                          << colors::RESET << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 
+                          << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
                 os.clear();
                 j++;
             }
