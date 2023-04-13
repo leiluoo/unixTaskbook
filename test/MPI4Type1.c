@@ -19,7 +19,6 @@ int main()
 			GetN(&numbers[i]);
 
 	MPI_Bcast(numbers, size - 1, newtype, 0, MPI_COMM_WORLD);
-
 	if (rank != 0)
 		for (int i = 0; i < (size - 1) * 3; ++i)
 			PutN(numbers[i]);
