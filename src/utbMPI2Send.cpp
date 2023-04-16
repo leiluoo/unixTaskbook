@@ -10,6 +10,10 @@ public:
 	utbMPI2Send();
 	virtual ~utbMPI2Send() {}
 
+	virtual void utb_set_theme(std::string theme) {
+		pt4_set_theme(theme);
+	}
+
 	virtual void utb_print_task_info(int task_num, int language_option)
 	{
 		pt4_print_task_info(task_group, task_num, language_option);

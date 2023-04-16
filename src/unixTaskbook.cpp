@@ -154,6 +154,8 @@ void UnixTaskbook::parse_command(int argc, char *argv[])
 	command_parser.add<std::string>("directory", 'd', "check all programs in the directory, -p -t parameters are invalid after using this parameter", false, "");
 	command_parser.add("showtest", 's', "show all test when checking");
 	command_parser.add("help", 'h', "display this help and exit");
+	// 2023.04>
+	command_parser.add<std::string>("theme", 'c', "select a color theme", false, "black");
 
 	command_parser.footer("Development of a system for automatic verification of educational tasks in Linux.");
 
@@ -169,6 +171,7 @@ void UnixTaskbook::parse_command(int argc, char *argv[])
 	// program = command_parser.get<std::string>("program");
 	check_dir = command_parser.get<std::string>("directory");
 	print_option = command_parser.exist("showtest");
+	theme = command_parser.get<std::string>("theme");
 
 	std::string utb_show_mode;
 	if (getenv("UTB_SHOW_MODE") != NULL)
@@ -627,6 +630,9 @@ int UnixTaskbook::execute_run(const std::string pre_task_name)
 	parse_task_name(pre_task_name);
 
 	load_task_lib();
+	
+	if (!tasklib->print_file)
+		tasklib->utb_set_theme(theme);
 
 	print_task_info(task_num, language_option);
 	if (!tasklib->print_file)

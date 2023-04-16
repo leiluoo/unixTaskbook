@@ -38,6 +38,7 @@ public:
 	std::string get_task_info(int task_num, int language_option) const;
 	// The virtual function (interface)
 	// Implemented by each tasklib itself
+	virtual void utb_set_theme(std::string theme) {}
 	virtual void utb_print_task_info(int task_num, int language_option) {} // MABR - new function
 	virtual void utb_generate_task_test(int task_num, int test_num) = 0;   // MABR - new parameter: int test_num
 	virtual void utb_generate_task_control(int task_num) = 0;

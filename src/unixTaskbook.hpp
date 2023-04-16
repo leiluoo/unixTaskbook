@@ -27,6 +27,8 @@ private:
 	cmdline::parser command_parser;
 	bool print_option = false;
 
+	//2023.04
+	std::string theme;
 protected:
 	void check_task_lib();
     void parse_command(int argc, char *argv[]);

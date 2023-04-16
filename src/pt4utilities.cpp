@@ -68,6 +68,10 @@ void init_task(int num, int test)
     InitTask_(num, test);
 }
 
+void pt4_set_theme(std::string theme) {
+    SetTheme(theme);
+}
+
 void check_dylib(std::string task_group)
 {
     if (task_group.find("MPI") != std::string::npos) 

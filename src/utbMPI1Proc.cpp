@@ -9,6 +9,10 @@ private:
 public:
 	utbMPI1Proc();
 	virtual ~utbMPI1Proc() {}
+	
+	virtual void utb_set_theme(std::string theme) {
+		pt4_set_theme(theme);
+	}
 
 	virtual void utb_print_task_info(int task_num, int language_option)
 	{

@@ -44,5 +44,6 @@ void PrintTaskDemo();
 bool CheckAllResults();
 void PrintTask();
 int  GetCursize();
+void SetTheme(std::string theme);
 
 #endif // UDATA_H

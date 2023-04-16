@@ -16,14 +16,15 @@ const std::string HIDDEN = "\033[8m";
 
 // Text colors
 const std::string BLACK = "\033[38;2;0;0;0m";
+const std::string GRAY = "\033[38;2;128;128;128m";
 const std::string RED = "\033[31m";
 const std::string GREEN = "\033[32m";
 const std::string YELLOW = "\033[38;2;255;255;0m";
-const std::string BLUE = "\033[34m";
+const std::string BLUE = "\033[38;2;0;15;248m";
 const std::string MAGENTA = "\033[35m";
 const std::string CYAN = "\033[36m";
 const std::string WHITE = "\033[38;2;255;255;255m";
-const std::string GRAY = "\033[90m";
+//const std::string GRAY = "\033[90m";
 const std::string BRIGHT_RED = "\033[91m";
 const std::string BRIGHT_GREEN = "\033[92m";
 const std::string BRIGHT_YELLOW = "\033[93m";

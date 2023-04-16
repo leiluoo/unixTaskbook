@@ -1,0 +1,14 @@
+# This is a configuration file for the app's colors.
+# The file specifies the RGB values for each of the five colors used in the app.
+
+# Define the RGB value for the background color.
+theme_bg: [0, 0, 50] # Black
+
+# Define the RGB value for the data color.
+data_color: [255, 255, 200] # Yellow
+
+# Define the RGB value for the text color.
+text_color: [128, 128, 200] # Gray
+
+# Define the RGB value for the border color.
+border_color: [255, 255, 255] # White

@@ -10,6 +10,7 @@
 #include "box_drawings.hpp"
 #include <regex>
 #include <sstream>
+#include <yaml-cpp/yaml.h>
 
 // Declare variables
 int TaskCount, NumberOfTests, NumberOfUsedData,
@@ -28,6 +29,16 @@ std::vector<std::vector<TData>> odata_procs;
 
 // 2023.03>
 bool check_result = false;
+
+// 2023.04>
+std::string theme_bg = colors::BG_BLACK;
+std::string data_color = colors::YELLOW;
+std::string text_color = colors::GRAY;
+std::string border_color = colors::WHITE;
+
+std::unordered_map<std::string, std::vector<std::string>> theme_map = {
+    {"black", {colors::BG_BLACK, colors::YELLOW, colors::GRAY, colors::WHITE}},
+    {"white", {colors::BG_BRIGHT_WHITE, colors::BLUE, colors::BLACK, colors::BLACK}}};
 
 bool LoadData()
 {
@@ -375,19 +386,20 @@ std::string check_bg(const std::string &RunInfo)
     return bg_color;
 }
 
-std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "") {
+std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "")
+{
     if (templateLine != "")
     {
         size_t preTextSize = (80 * box_drawings::LIGHT_HORIZONTAL.size() - templateLine.size()) / (box_drawings::LIGHT_HORIZONTAL.size() - 1);
         return templateLine.replace((pos - preTextSize) * box_drawings::LIGHT_HORIZONTAL.size() + preTextSize, title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
     }
     std::string line;
-    for (size_t i = 0; i < MaxWidth; ++i) {
+    for (size_t i = 0; i < MaxWidth; ++i)
+    {
         line += box_drawings::LIGHT_HORIZONTAL;
     }
     return line.replace(pos * box_drawings::LIGHT_HORIZONTAL.size(), title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
 }
-
 
 // print header info
 void PrintHeader(const std::vector<std::string> &RunInfos)
@@ -403,7 +415,7 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
     std::string s1 = InitString(' ');
     s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
     s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0]
               << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     for (const auto &group : groups)
     {
@@ -421,8 +433,8 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
         s[1] = s1;
         PrintCmt(s[1], oss2.str(), 2);
         std::string bg_color = check_bg(group.first);
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
-                  << colors::RESET << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+        std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << bg_color << colors::WHITE << s[1]
+                  << colors::RESET << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
     }
 }
 
@@ -433,13 +445,13 @@ void PrintHeader(const std::string RunInfo)
     std::string s1 = InitString(' ');
     s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
     s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0] 
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0]
               << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     s[1] = s1;
     PrintCmt(s[1], RunInfo, 2);
     std::string bg_color = check_bg(RunInfo);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << bg_color << s[1] 
-              << colors::RESET << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << bg_color << colors::WHITE << s[1]
+              << colors::RESET << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
 }
 
 // print task text
@@ -453,24 +465,24 @@ void PrintTaskText()
         s[i] = s1;
     for (int i = 0; i <= nttext - 1; i++)
         PrintCmt(s[ttext[i].y], ttext[i].s, ttext[i].x);
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0]
               << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 1; i <= nttext; i++)
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s[i] 
-                  << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+        std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << theme_bg << text_color << s[i]
+                  << colors::RESET << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
 }
 
 // std::string ProcessString(const std::string &input)
 // {
 //     std::string output = input;
 //     size_t pos = 0;
-//     while ((pos = output.find("Process " + colors::YELLOW, pos)) != std::string::npos)
+//     while ((pos = output.find("Process " + data_color, pos)) != std::string::npos)
 //     {
-//         pos += ("Process " + colors::YELLOW).size();
+//         pos += ("Process " + data_color).size();
 //         size_t endPos = output.find(colors::RESET, pos);
 //         if (endPos == std::string::npos)
 //             break;
-//         output.replace(pos, endPos - pos, colors::WHITE + output.substr(pos, endPos - pos) + colors::RESET);
+//         output.replace(pos, endPos - pos, border_color + output.substr(pos, endPos - pos) + colors::RESET);
 //         pos = endPos + colors::RESET.size();
 //     }
 //     return output;
@@ -487,15 +499,50 @@ void PrintTaskText()
 
 //     std::regex pattern(R"((-?(true|false|\d+(\.\d+)?)))");
 
-//     std::string colored_text = std::regex_replace(text, pattern, colors::YELLOW + "$&" + colors::RESET);
+//     std::string colored_text = std::regex_replace(text, pattern, data_color + "$&" + colors::RESET);
 
 //     return ProcessString(colored_text);
 // }
 
+std::string toRegexString(const std::string &str)
+{
+    std::string result;
+    for (char c : str)
+    {
+        switch (c)
+        {
+        case '\\':
+            result += "\\\\";
+            break;
+        case '^':
+        case '$':
+        case '.':
+        case '|':
+        case '(':
+        case ')':
+        case '[':
+        case ']':
+        case '{':
+        case '}':
+        case '?':
+        case '+':
+        case '*':
+            result += "\\";
+            result += c;
+            break;
+        default:
+            result += c;
+            break;
+        }
+    }
+    return result;
+}
+
 std::string ProcessString(const std::string &input)
 {
-    std::regex re("Process \033\\[0m\033\\[38;2;255;255;0m(\\d+)\033\\[0m\033\\[38;2;255;255;255m");
-    std::string replacement("Process " + std::string("$1") + colors::RESET + colors::WHITE);
+    std::string pattern = "Process " + colors::RESET + theme_bg + data_color;
+    std::regex re(toRegexString(pattern) + "(\\d+)");
+    std::string replacement("Process " + text_color + std::string("$1"));
     std::string output = std::regex_replace(input, re, replacement);
     return output;
 }
@@ -511,7 +558,7 @@ std::string Colorize(const std::string &text)
 
     std::regex pattern(R"((-?(true|false|\d+(\.\d+)?)))");
 
-    std::string colored_text = std::regex_replace(text, pattern, colors::RESET + colors::YELLOW + "$&" + colors::RESET + colors::WHITE);
+    std::string colored_text = std::regex_replace(text, pattern, colors::RESET + theme_bg + data_color + "$&" + colors::RESET + theme_bg + text_color);
 
     return ProcessString(colored_text);
 }
@@ -548,12 +595,12 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
     {
         PrintCmt(s[b[i].y], b[i].s, b[i].x);
     }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0] 
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s[0]
               << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 1; i <= size; i++)
     {
-        std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << Colorize(s[i]) 
-                  << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+        std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << theme_bg << text_color << Colorize(s[i])
+                  << colors::RESET << border_color << theme_bg << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
     }
 }
 
@@ -564,8 +611,7 @@ void PrintEndLine()
     {
         s1 = s1 + box_drawings::LIGHT_HORIZONTAL;
     }
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_UP_AND_RIGHT << s1 << 
-              box_drawings::LIGHT_UP_AND_LEFT << colors::RESET << std::endl;
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_UP_AND_RIGHT << s1 << box_drawings::LIGHT_UP_AND_LEFT << colors::RESET << std::endl;
 }
 
 // check if it is necessary to print show info
@@ -590,7 +636,7 @@ void PrintShow()
     std::string s0 = "";
     s0 = BuildTitle(" Debug information ", 4);
 
-    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0 
+    std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0
               << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
     for (int i = 0; i < cursize; ++i)
     {
@@ -611,8 +657,8 @@ void PrintShow()
                     s = os.str();
                     PrintCmt(s0, s.substr(0, MaxWidth - 3) + "*", 2);
                     s.erase(0, MaxWidth - 3);
-                    std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 
-                              << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                    std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << theme_bg << text_color << s0
+                              << colors::RESET << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
                     os.clear();
                     j++;
                 }
@@ -621,8 +667,8 @@ void PrintShow()
                 os << " " << i << "|  " << j << ">  " << s;
                 s = os.str();
                 PrintCmt(s0, s, 2);
-                std::cout << colors::WHITE << colors::BOLD << box_drawings::LIGHT_VERTICAL << s0 
-                          << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
+                std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << theme_bg << text_color << s0
+                          << colors::RESET << theme_bg << border_color << box_drawings::LIGHT_VERTICAL << colors::RESET << std::endl;
                 os.clear();
                 j++;
             }
@@ -660,4 +706,47 @@ void PrintTask()
 int GetCursize()
 {
     return cursize;
+}
+
+void LoadColorsFromConfig()
+{
+    YAML::Node config = YAML::LoadFile(getenv("HOME") + std::string("/unixTaskbook/config.yml"));
+
+    theme_bg = "\033[48;2;";
+    theme_bg += std::to_string(config["theme_bg"][0].as<int>()) + ";";
+    theme_bg += std::to_string(config["theme_bg"][1].as<int>()) + ";";
+    theme_bg += std::to_string(config["theme_bg"][2].as<int>()) + "m";
+
+    data_color = "\033[38;2;";
+    data_color += std::to_string(config["data_color"][0].as<int>()) + ";";
+    data_color += std::to_string(config["data_color"][1].as<int>()) + ";";
+    data_color += std::to_string(config["data_color"][2].as<int>()) + "m";
+
+    text_color = "\033[38;2;";
+    text_color += std::to_string(config["text_color"][0].as<int>()) + ";";
+    text_color += std::to_string(config["text_color"][1].as<int>()) + ";";
+    text_color += std::to_string(config["text_color"][2].as<int>()) + "m";
+
+    border_color = "\033[38;2;";
+    border_color += std::to_string(config["border_color"][0].as<int>()) + ";";
+    border_color += std::to_string(config["border_color"][1].as<int>()) + ";";
+    border_color += std::to_string(config["border_color"][2].as<int>()) + "m";
+}
+
+void SetTheme(std::string theme = "black")
+{
+    if (theme == "custom")
+    {
+        LoadColorsFromConfig();
+        return;
+    }
+    if (!theme_map.count(theme))
+    {
+        // set default color if given theme not exist.
+        theme = "black";
+    }
+    theme_bg = theme_map[theme][0];
+    data_color = theme_map[theme][1];
+    text_color = theme_map[theme][2];
+    border_color = theme_map[theme][3];
 }
