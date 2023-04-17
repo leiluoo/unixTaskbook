@@ -11,6 +11,9 @@ Still interest? Turn to my [thesis](https://github.com/leiluoo/thesis) for more 
 # How to run
 
 firstly, intall MPICH on your machine
+
+And then, make sure you have installed yaml-cpp package in your environment. Installation reference [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
 ```bash
 apt install mpich
 ```
