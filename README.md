@@ -10,14 +10,14 @@ Still interest? Turn to my [thesis](https://github.com/leiluoo/thesis) for more 
 
 # How to run
 
-firstly, intall MPICH on your machine
-
-And then, make sure you have installed yaml-cpp package in your environment. Installation reference [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+Firstly, intall MPICH on your machine
 
 ```bash
 apt install mpich
 ```
-then clone the repo
+And then, make sure you have installed yaml-cpp package in your environment. Installation reference [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
+Then clone the repo
 ```bash
 git clone https://github.com/leiluoo/unixTaskbook.git
 ```
