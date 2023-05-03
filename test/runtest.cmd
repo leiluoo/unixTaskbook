@@ -1,4 +1,4 @@
 #!/bin/bash
 LD_LIBRARY_PATH=../utblib
 export LD_LIBRARY_PATH
-../unixTaskbook -c custom -t $1
+../unixTaskbook -c custom -l ru -t $1

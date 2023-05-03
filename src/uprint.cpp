@@ -2,15 +2,30 @@
 #include <sstream>
 #include <iomanip>
 #include "uprint.h"
+#include <codecvt>
 
 std::string FTrueMark = "true ";
 std::string FFalseMark = "false";
 char FStringQMark = '"';
 char FCharQMark = '\'';
 
+// void PrintCmt(std::string &s, const std::string &s0, int x)
+// {
+//     s.replace(x, s0.size(), s0);
+// }
+
 void PrintCmt(std::string &s, const std::string &s0, int x)
 {
-    s.replace(x, s0.size(), s0);
+    // Convert input string to wide character encoding
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    std::wstring ws = converter.from_bytes(s);
+    std::wstring ws0 = converter.from_bytes(s0);
+
+    // Replacement operation in wide character encoding
+    ws.replace(x, ws0.size(), ws0);
+
+    // Convert the replaced wide character encoding back to a UTF-8 encoded string
+    s = converter.to_bytes(ws);
 }
 
 void PrintN(std::string &s, int n, int x, int w, bool check)

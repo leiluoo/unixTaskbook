@@ -36,6 +36,7 @@ std::string data_color = colors::YELLOW;
 std::string text_color = colors::GRAY;
 std::string border_color = colors::WHITE;
 
+// themes, here to add new themes
 std::unordered_map<std::string, std::vector<std::string>> theme_map = {
     {"black", {colors::BG_BLACK, colors::YELLOW, colors::GRAY, colors::WHITE}},
     {"white", {colors::BG_BRIGHT_WHITE, colors::BLUE, colors::BLACK, colors::BLACK}}};
@@ -368,6 +369,15 @@ std::string InitString(char c)
     return std::string(MaxWidth, c);
 }
 
+std::string InitString(std::string s)
+{
+    std::string ret = "";
+    for (int i = 0; i < MaxWidth; ++i) {
+        ret += s;
+    }
+    return ret;
+}
+
 std::string check_bg(const std::string &RunInfo)
 {
     std::string bg_color = "";
@@ -386,20 +396,49 @@ std::string check_bg(const std::string &RunInfo)
     return bg_color;
 }
 
-std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "")
-{
-    if (templateLine != "")
-    {
-        size_t preTextSize = (80 * box_drawings::LIGHT_HORIZONTAL.size() - templateLine.size()) / (box_drawings::LIGHT_HORIZONTAL.size() - 1);
-        return templateLine.replace((pos - preTextSize) * box_drawings::LIGHT_HORIZONTAL.size() + preTextSize, title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
-    }
-    std::string line;
-    for (size_t i = 0; i < MaxWidth; ++i)
-    {
-        line += box_drawings::LIGHT_HORIZONTAL;
-    }
-    return line.replace(pos * box_drawings::LIGHT_HORIZONTAL.size(), title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
-}
+// std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "")
+// {
+//     if (templateLine != "")
+//     {
+//         size_t preTextSize = (80 * box_drawings::LIGHT_HORIZONTAL.size() - templateLine.size()) / (box_drawings::LIGHT_HORIZONTAL.size() - 1);
+//         return templateLine.replace((pos - preTextSize) * box_drawings::LIGHT_HORIZONTAL.size() + preTextSize, title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
+//     }
+//     std::string line;
+//     for (size_t i = 0; i < MaxWidth; ++i)
+//     {
+//         line += box_drawings::LIGHT_HORIZONTAL;
+//     }
+//     return line.replace(pos * box_drawings::LIGHT_HORIZONTAL.size(), title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
+// }
+
+// std::string BuildTitle(std::string title, size_t pos, std::string templateLine = "")
+// {
+//     if (templateLine != "")
+//     {
+//         // Convert the templateLine to a wide-character string
+//         std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+//         std::wstring wtemplateLine = converter.from_bytes(templateLine);
+
+//         // Compute preTextSize using the wide-character string
+//         size_t preTextSize = (80 * box_drawings::LIGHT_HORIZONTAL.size() - wtemplateLine.size()) / (box_drawings::LIGHT_HORIZONTAL.size() - 1);
+
+//         // Convert the title to a wide-character string
+//         std::wstring wtitle = converter.from_bytes(title);
+
+//         // Replace the title in the wide-character templateLine
+//         wtemplateLine.replace((pos - preTextSize) * box_drawings::LIGHT_HORIZONTAL.size() + preTextSize, wtitle.size(), wtitle);
+
+//         // Convert the wide-character templateLine back to a multibyte string
+//         return converter.to_bytes(wtemplateLine);
+//     }
+
+//     std::string line;
+//     for (size_t i = 0; i < MaxWidth; ++i)
+//     {
+//         line += box_drawings::LIGHT_HORIZONTAL;
+//     }
+//     return line.replace(pos * box_drawings::LIGHT_HORIZONTAL.size(), title.size() * box_drawings::LIGHT_HORIZONTAL.size(), title);
+// }
 
 // print header info
 void PrintHeader(const std::vector<std::string> &RunInfos)
@@ -413,8 +452,12 @@ void PrintHeader(const std::vector<std::string> &RunInfos)
 
     std::vector<std::string> s(2);
     std::string s1 = InitString(' ');
-    s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
-    s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
+    std::string s0 = InitString(box_drawings::LIGHT_HORIZONTAL);
+    PrintCmt(s0, GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    PrintCmt(s0, '(' + std::to_string(TestNumber) + ')', 75);
+    s[0] = s0;
+    // s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    // s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
     std::cout << theme_bg << border_color << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0]
               << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     for (const auto &group : groups)
@@ -443,8 +486,12 @@ void PrintHeader(const std::string RunInfo)
 {
     std::vector<std::string> s(2);
     std::string s1 = InitString(' ');
-    s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
-    s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
+    std::string s0 = InitString(box_drawings::LIGHT_HORIZONTAL);
+    PrintCmt(s0, GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    PrintCmt(s0, '(' + std::to_string(TestNumber) + ')', 75);
+    s[0] = s0;
+    // s[0] = BuildTitle(' ' + GrTopic + std::to_string(TaskNumber) + " [" + GrDescr + "] ", 4);
+    // s[0] = BuildTitle('(' + std::to_string(TestNumber) + ')', 75, s[0]);
     std::cout << theme_bg << border_color << box_drawings::LIGHT_DOWN_AND_RIGHT << s[0]
               << box_drawings::LIGHT_DOWN_AND_LEFT << colors::RESET << std::endl;
     s[1] = s1;
@@ -567,7 +614,9 @@ void PrintData(TDataArray a, int na, TCommentArray b, int nb, int size, std::str
 {
     std::vector<std::string> s(size + 1);
     std::string s1 = InitString(' ');
-    s[0] = BuildTitle(" " + title + " ", 4);
+    std::string s0 = InitString(box_drawings::LIGHT_HORIZONTAL);
+    PrintCmt(s0, " " + title + " ", 4);
+    s[0] = s0;
     for (int i = 1; i <= size; i++)
         s[i] = s1;
     for (int i = 0; i < na; i++)
@@ -633,8 +682,8 @@ void PrintShow()
     if (!check_show())
         return;
     std::string s1 = InitString(' ');
-    std::string s0 = "";
-    s0 = BuildTitle(" Debug information ", 4);
+    std::string s0 = InitString(box_drawings::LIGHT_HORIZONTAL);
+    PrintCmt(s0, " Debug information ", 4);
 
     std::cout << theme_bg << border_color << box_drawings::LIGHT_VERTICAL_AND_RIGHT << s0
               << box_drawings::LIGHT_VERTICAL_AND_LEFT << colors::RESET << std::endl;
