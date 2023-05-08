@@ -587,10 +587,15 @@ std::string toRegexString(const std::string &str)
 
 std::string ProcessString(const std::string &input)
 {
-    std::string pattern = "Process " + colors::RESET + theme_bg + data_color;
-    std::regex re(toRegexString(pattern) + "(\\d+)");
-    std::string replacement("Process " + text_color + std::string("$1"));
-    std::string output = std::regex_replace(input, re, replacement);
+    std::string pattern_ru = "Процесс " + colors::RESET + theme_bg + data_color;
+    std::string pattern_en = "Process " + colors::RESET + theme_bg + data_color;
+    std::regex re_ru(toRegexString(pattern_ru) + "(\\d+)");
+    std::regex re_en(toRegexString(pattern_en) + "(\\d+)");
+    std::string replacement_ru("Процесс " + text_color + std::string("$1"));
+    std::string replacement_en("Process " + text_color + std::string("$1"));
+    std::string output;
+    output = std::regex_replace(input, re_ru, replacement_ru);
+    output = std::regex_replace(input, re_en, replacement_en);
     return output;
 }
 
