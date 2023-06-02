@@ -595,7 +595,7 @@ std::string ProcessString(const std::string &input)
     std::string replacement_en("Process " + text_color + std::string("$1"));
     std::string output;
     output = std::regex_replace(input, re_ru, replacement_ru);
-    output = std::regex_replace(input, re_en, replacement_en);
+    output = std::regex_replace(output, re_en, replacement_en);
     return output;
 }
 
